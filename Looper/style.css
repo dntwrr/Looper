@@ -1,0 +1,12 @@
+
+ .descript {
+overflow: scroll;
+ }
+
+.genre {
+    word-wrap: break-word;
+}
+
+p{
+    font-size: small;
+}
