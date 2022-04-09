@@ -16,6 +16,8 @@ p{
     font-size: .75em;
     /* color: yellow; */
     word-wrap: break-word;
+    border: 1px solid black;
+    padding-bottom: 3px;
 }
 
 /* .picture {
@@ -27,18 +29,13 @@ p{
 
 .dis {
     border: 1px solid black;
-    height: 7vh;
+    height: 12vh;
     font-size: .5em;
     
 
 }
 
 .picture {
-    /* border: 10px solid black; */
-    height: 15vh;
-}
-
-.trailer {
-    height: 5vh;
-    width: 9vh;
+    border: 1px solid black;
+    height: 23vh;
 }

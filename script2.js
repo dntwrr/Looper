@@ -49,13 +49,15 @@ fetch(url, options)
   .then((response) => response.json())
   .then((response) => response.data.MediaListCollection.lists[0].entries)
   .then((response) => randomize(response));
+// .then(createTrailer())
 
 const randomize = (data) => {
   for (i = 0; i < 5; i++) {
-    let k = Math.floor(Math.random() * (data.length - 0 + 1));
+    var k = Math.floor(Math.random() * (data.length - 0 + 1));
 
     displayAnime(k, data);
   }
+  createTrailer(data);
 };
 
 const displayAnime = (i, planList) => {
@@ -80,7 +82,7 @@ const displayAnime = (i, planList) => {
   row1.append(episode);
   row1.append(score);
 
-  const picture = $('<div class="col-3 picture">');
+  const picture = $('<div class="col-4 picture">');
   picture.css("background-image", `url('  ${anime.coverImage.extraLarge} ')`);
   picture.css("background-size", "contain");
   picture.css("background-repeat", "no-repeat");
@@ -94,7 +96,7 @@ const displayAnime = (i, planList) => {
 
   const row2 = $('<div class="row">');
   const row2_2 = $('<div class="row">');
-  const pictureRow = $('<div class="col-9">');
+  const pictureRow = $('<div class="col-8">');
 
   table.append(row2);
   row2.append(picture);
@@ -107,12 +109,39 @@ const displayAnime = (i, planList) => {
   if (anime.trailer !== null) {
     if (anime.trailer.site == "youtube") {
       var trailer = $(
-        `<iframe src="https://www.youtube.com/embed/${anime.trailer.id}"  frameborder="0" controls="0" allowfullscreen class="col-12 trailer">`
-      );
+        `<button type="button" class="btn btn-primary trailer col-6" id="${i}">`
+        );
+        trailer.text("Play Trailer");
+  //     var trailer = $(
+  //       `<iframe width="127" height="100" allowfullscreen src="https://www.youtube.com/embed/${anime.trailer.id}?showinfo=0&controls=0&autohid=1"  frameborder="0"  class="col-12 trailer">`
+  //     );
     }
   } else {
-    var trailer = $('<div class = "col-12">').text("NOT FOUND");
+    var trailer = $('<div class = "col-12">')
+    trailer.text("NOT FOUND");
   }
-
   row2_2.append(trailer);
+};
+
+const createTrailer = (data) => {
+  $(".trailer").on("click", function (event) {
+
+    let i = $(event.target).attr('id')
+    console.log(event.target)
+    console.log($(event.target).attr('id'));
+    anime = data[i].media
+    var modalBody = $('#modalBody')
+    const trailer = $(
+             `<iframe allowfullscreen src="https://www.youtube.com/embed/${anime.trailer.id}?showinfo=0&controls=0&autohid=1&autoplay=1"  frameborder="0">`)
+      modalBody.html(trailer)
+      
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+
+    myModal.show();
+
+    $(".btn-close").on("click", function (event) {
+      myModal.hide();
+      console.log("1");
+    });
+  });
 };
