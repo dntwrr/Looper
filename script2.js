@@ -67,28 +67,28 @@ const displayAnime = (i, planList) => {
   const table = $('<div id="table" class="container-fluid">');
   $("body").append(table);
 
-  const name = $('<div class="col-6">');
-  const score = $('<div class="col-3">');
-  const episode = $('<div class="col-3">');
+  const name = $('<div class="col-6 name">');
+  const score = $('<div class="col-3 score-episodes">');
+  const episode = $('<div class="col-3 score-episodes">');
 
   name.text(anime.title.userPreferred);
-  episode.text(`Episodes:${anime.episodes}`);
-  score.text(`Score:${anime.averageScore}`);
+  episode.text(`Episodes: ${anime.episodes}`);
+  score.text(`Score: ${anime.averageScore}`);
 
-  const row1 = $('<div class="row">');
+  const row1 = $('<div class="row align-items-center justify-content-start">');
   table.append(row1);
 
   row1.append(name);
   row1.append(episode);
   row1.append(score);
 
-  const picture = $('<div class="col-4 picture">');
+  const picture = $('<div class="col-6 picture">');
   picture.css("background-image", `url('  ${anime.coverImage.extraLarge} ')`);
-  picture.css("background-size", "contain");
+  picture.css("background-size", "cover");
   picture.css("background-repeat", "no-repeat");
 
   const description = $('<div class="col-12 overflow-scroll dis">');
-  description.text(anime.description);
+  description.html(anime.description);
   const genre = $('<div class="col-8 text-wrap genre-season">');
   genre.text(anime.genres);
   const season = $('<div class="col-4 genre-season">');
@@ -96,7 +96,7 @@ const displayAnime = (i, planList) => {
 
   const row2 = $('<div class="row">');
   const row2_2 = $('<div class="row">');
-  const pictureRow = $('<div class="col-8">');
+  const pictureRow = $('<div class="col-6">');
 
   table.append(row2);
   row2.append(picture);
@@ -109,15 +109,13 @@ const displayAnime = (i, planList) => {
   if (anime.trailer !== null) {
     if (anime.trailer.site == "youtube") {
       var trailer = $(
-        `<button type="button" class="btn btn-primary trailer col-6" id="${i}">`
+        `<button type="button" class="btn btn-sm btn-primary trailer col-6 m-auto" id="${i}">`
         );
         trailer.text("Play Trailer");
-  //     var trailer = $(
-  //       `<iframe width="127" height="100" allowfullscreen src="https://www.youtube.com/embed/${anime.trailer.id}?showinfo=0&controls=0&autohid=1"  frameborder="0"  class="col-12 trailer">`
-  //     );
+
     }
   } else {
-    var trailer = $('<div class = "col-12">')
+    var trailer = $('<div class = "col-8 m-auto trailer">')
     trailer.text("NOT FOUND");
   }
   row2_2.append(trailer);
@@ -132,7 +130,7 @@ const createTrailer = (data) => {
     anime = data[i].media
     var modalBody = $('#modalBody')
     const trailer = $(
-             `<iframe allowfullscreen src="https://www.youtube.com/embed/${anime.trailer.id}?showinfo=0&controls=0&autohid=1&autoplay=1"  frameborder="0">`)
+             `<iframe allowfullscreen id="trailer" width="100%" height="100%" src="https://www.youtube.com/embed/${anime.trailer.id}?showinfo=1&controls=1&autohid=0&autoplay=1"  frameborder="0">`)
       modalBody.html(trailer)
       
     var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
@@ -141,6 +139,7 @@ const createTrailer = (data) => {
 
     $(".btn-close").on("click", function (event) {
       myModal.hide();
+      $('#trailer').remove()
       console.log("1");
     });
   });

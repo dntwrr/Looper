@@ -13,11 +13,12 @@ p{
 } */
 
 .genre-season {
-    font-size: .75em;
+    font-size: .7em;
     /* color: yellow; */
-    word-wrap: break-word;
+    /* word-wrap: */
+    white-space: pre-wrap;
     border: 1px solid black;
-    padding-bottom: 3px;
+    margin-bottom: 10px;
 }
 
 /* .picture {
@@ -29,13 +30,28 @@ p{
 
 .dis {
     border: 1px solid black;
-    height: 12vh;
-    font-size: .5em;
+    height: 23.5vh;
+    font-size: .7em;
     
-
+    
 }
 
 .picture {
     border: 1px solid black;
-    height: 23vh;
+    height: 32.5vh;
 }
+
+.score-episodes {
+    font-size: .8em;
+}
+
+#table {
+    margin-bottom: 20px;
+}
+
+.name {
+    padding-left: 24x;
+    
+}
+
+/* col 4 and height 23 &12*/
