@@ -1,213 +1,202 @@
-//Secret = KDoHhmRC03HIRIIwTl4VzboWwfmWmMtferoPoyE5
-// ID = 7853
-
-var id = 7853;
-
-function PasteLogin() {
-  link = $(
-    `<a href='https://anilist.co/api/v2/oauth/authorize?client_id=${id}&response_type=token'>`
-  );
-  link.text("Login");
-  link.attr("id", "Login");
-  $("body").append(link);
+class anime {
+  constructor(data) {
+    this.title = data.title.userPreferred;
+    this.score = data.averageScore;
+    this.img = data.coverImage.extraLarge;
+    this.description = data.description;
+    this.episodes = data.episodes;
+    this.genres = data.genres.join(" ");
+    this.season = `${data.season} ${data.seasonYear}`;
+    this.streamEpisodes = data.streamingEpisodes;
+    this.trailer = data.trailer;
+    // this.trailerID = data.trailer.id ??
+  }
 }
 
-var access_token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjcyZjdhNmNkZDI5YzIxNGQxYjM5ODMwMGY0NWQ5YjY0MGJjYzEyZmQ3Y2E1YjNkOTc4Nzc0NjQyMDU2MjlkNmU0YzgwNzM0ZGFjNjljY2U4In0.eyJhdWQiOiI3ODUzIiwianRpIjoiNzJmN2E2Y2RkMjljMjE0ZDFiMzk4MzAwZjQ1ZDliNjQwYmNjMTJmZDdjYTViM2Q5Nzg3NzQ2NDIwNTYyOWQ2ZTRjODA3MzRkYWM2OWNjZTgiLCJpYXQiOjE2NDg0MjU0OTgsIm5iZiI6MTY0ODQyNTQ5OCwiZXhwIjoxNjc5OTYxNDk4LCJzdWIiOiIxOTAxNzMiLCJzY29wZXMiOltdfQ.bqn4_nrjJj0OcvWjhJQm9VQyf76KhqfMstKZ-b4xG5Z-9I1zY1QAD5TGff1Y_xI-cHzkx6oBzboWruB_td6FAB5YhUalzkorHiGVqBpD0HHwxXiZIS79-9gPlo6TW6ktx2weaOm-fGcXWx4hZn8hb8XIVE-8DF6evDO596gDVtBIQb75QTPWeqR3AJbtiC8hzFTfDZDcYrAveqGoiAhi92PNJoPcEmJMno7ygoVSUfwGn0MRLWBu7m5nYx5xTU7Jm6KsTsnD-tklLoCdTcPxqVzK5MnZZiWjl6wuakyQ9CUpQDpuBuSLeYQcrA9F-npxYxSMdHuHsqvWMfzBAfRIxWjWfo-cTnWK5s8dewm6AHMeEPOBgePT8tCgC6W16Luzf1PhGuCgt_WFGiYVUUct5Wtx2mHZ3XbGpzu07Mov4bfOutBg63YF-Ev4yGBTa5EPUqJYinFuFZJR3-u8RJ9IpyCK9loBcEpBc9fvYfOCWvh3k3RiJthpdPz3wgkmmgbbhWUZE1OFmJwW5rcqhl-Mkk2zWq_cTxhMjI4lfCHgCjlVizsh5Y3aUXKfhdOeObjAAkFlf_9Hc07JeErm2u5F2_XbVydv4TYyN9Er6ykzeTZBRaNJyCAoarVsaRlSjqYSVCq-wIk46j2T5Tn9W-iRx7Icqq62k7xvnAzL4QBIjKo";
-
-// access_token = window.location.hash.split('access_token=')[1]
-console.log(access_token);
-
-PasteLogin();
-
-var query = `
-
-query ($id: Int!, $listType: MediaType) {
-  Page {
-    mediaList(userId: 573, type: $listType) {
-      id
-      score
-      scoreRaw: score(format: POINT_100)
-      progress
-      progressVolumes
-      repeat
-      private
-      priority
-      notes
-      hiddenFromStatusLists
-      startedAt {
-        year
-        month
-        day
-      }
-      completedAt {
-        year
-        month
-        day
-      }
-      updatedAt
-      createdAt
-      media {
-        id
-        title {
-          userPreferred
-        }
-      }
-    }
-  }
-}`;
-
-var variable = {
-  id: 573,
+const test = {
+  title: { userPreferred: "test" },
+  averageScore: "score",
+  coverImage: { extraLarge: "pic" },
+  description: "descript",
+  episodes: "epis",
+  genres: ["test", "test"],
 };
 
-var query2 = `{
-  MediaListCollection(userId: 190173, type: ANIME, status_in: PLANNING) {
-    lists {
-      entries {
-        media {
-          id
-          title {
-            romaji
-            english
-            native
-            userPreferred
-          }
-          episodes
-          description
-          season
-          seasonYear
-          coverImage {
-            extraLarge
-            large
-            medium
-          }
-          trailer {
-            site
-            thumbnail
-            id
-          }
-          genres
-          tags {
-            name
-          }
-          averageScore
-          streamingEpisodes {
-            site
+const test2 = new anime(test);
+console.log(test2);
+
+console.log(test);
+
+const apiID = 7853;
+var access_token = "";
+var userId = 0;
+const rand5 = [];
+const rand5Anime = [];
+
+function GetToken() {
+  const URL = window.location.href;
+  const token = URL.split("token=")[1].split("&token")[0];
+  access_token = token;
+}
+
+GetToken();
+const GetID = () => {
+  const query = `{
+        Viewer {
+            id 
+        }
+    }`;
+
+  const url = "https://graphql.anilist.co",
+    options = {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: query,
+      }),
+    };
+
+  fetch(url, options)
+    .then((response) => response.json())
+    .then((response) => {
+      userId = response.data.Viewer.id;
+    })
+    .then(fetchAnime);
+};
+
+const fetchAnime = () => {
+  const query = `{
+        MediaListCollection(userId: ${userId}, type: ANIME, status_in: PLANNING) {
+          lists {
+            entries {
+              media {
+                id
+                title {
+                  userPreferred
+                }
+                episodes
+                description
+                season
+                seasonYear
+                coverImage {
+                  extraLarge
+                }
+                trailer {
+                  site
+                  thumbnail
+                  id
+                }
+                genres
+                averageScore
+                streamingEpisodes {
+                  site
+                }
+              }
+            }
           }
         }
-      }
+      }`;
+
+  const url = "https://graphql.anilist.co",
+    options = {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: query,
+      }),
+    };
+
+  fetch(url, options)
+    .then((response) => response.json())
+    .then((response) => getTop5(response))
+    // .then(DisplayTop5());
+};
+
+const getTop5 = (data) => {
+  planList = data.data.MediaListCollection.lists[0].entries;
+
+  for (i = 0; i < 5; i++) {
+    let k = Math.floor(Math.random() * (planList.length - 0 + 1));
+    rand5.push(k);
+
+    if (rand5.indexOf(k) === -1) {
+      rand5.pop();
+      k = Math.floor(Math.random() * (planList.length - 0 + 1));
+      rand5.push(k);
     }
   }
-}`;
 
-var queryTest = `{
-  Media(search:"Fate/Zero") {
-    id
-  }
-}`;
+  rand5.forEach((element) => {
+    const randomAnime = new anime(planList[element].media);
+    rand5Anime.push(randomAnime);
 
-var url = "https://graphql.anilist.co",
-  options = {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + access_token,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: query2,
-    }),
-  };
+  });
 
-fetch(url, options)
-  .then((response) => response.json())
-  // .then(responseJson =>console.log(responseJson.data.MediaListCollection.lists[0].entries))
-  .then((response) => randomize(response));
+  DisplayTop5()
+};
 
-function randomize(response) {
-  data = response.data.MediaListCollection.lists[0].entries;
-  console.log("test", data);
-  for (i = 0; i < 5; i++) {
-    let k = Math.floor(Math.random() * (data.length - 0 + 1));
+const DisplayTop5 = () => {
+  console.log(rand5Anime.length)
+  rand5Anime.forEach((anime) => {
+    console.log(anime)
+    const table = document.createElement("div");
+    table.classList.add("container");
 
-    createTable(k);
-  }
-}
+    const name = document.createElement("div");
+    name.classList.add("col-6 name");
+    name.classList.add('name')
+    name.textContent(anime.title);
+    const score = document.createElement("div");
+    score.classList.add("col-3 score-episode");
+    scoreclassList.add('score-episode')
+    score.textContent(anime.score);
+    const episode = document.createElement("div");
+    episode.classList.add("col-3 score episode");
+    episode.classList.add('score-episode')
+    episode.textContent(anime.episodes);
+    const row1 = document.createElement("div");
+    row1.classList.add("row align-items-center justify-content-start");
 
-function createTable(k) {
-  console.log("table", data[k]);
-  const table = $('<div id="table" class="col-12 container">');
-  const row1 = $('<div id="1" class="col-12 row">');
-  const row2 = $('<div id="2" class="col-12 row h-25">');
-  const row3 = $('<div id="3" class="col-12 row">');
-  let anime = data[k].media;
+    const picture = document.createElement("div");
+    picture.classList.add("col-6 picture");
+    picture.style.backgroundImage = anime.img;
 
-  const name = $('<div class="col-6">');
-  const season = $('<p class="col-3">');
-  const score = $('<p class="col-2">');
+    const description = document.createElement("div");
+    description.classList.add("col-12 overflow-scroll dis");
+    description.textContent(anime.description);
+    const genre = document.createElement("div");
+    genre.classList.add("col-8 text-wrap genre-season");
+    genre.textContent(anime.genres);
+    const season = document.createElement("div");
+    season.classList.add("col-4 genre-season");
+    season.textContent(anime.season);
+    const row2 = document.createElement("div");
+    row2.classList.add("row");
+    const pictureRow = document.createElement("div");
+    pictureRow.classList.add("col-6");
+    const row2_2 = document.createElement("div");
+    row2_2.classList.add("row");
 
-  table.append(row1);
-  row1.append(name);
-  row1.append(season);
-  row1.append(score);
+    document.body.appendChild(table);
+    table.appendChild(row1);
+    row1.appendChild(name);
+    row1.appendChild(episode);
+    row1.appendChild(score);
 
-  const image = $('<div class="col-6 image">');
-  const description = $('<div class="overflow-scroll col-5 descript">');
+    table.appendChild(row2);
+    row2.appendChild(picture);
+    row2.appendChild(pictureRow);
 
-  table.append(row2);
-  row2.append(image);
-  row2.append(description);
-
-  const episodes = $('<p class="col-3">');
-  const genre = $('<p class="col-7" class="genre">');
-
-  if (anime.trailer != null) {
-     var trailer = $(
-      `<iframe src="https://www.youtube.com/embed/${anime.trailer.id}"  frameborder="0" allowfullscreen class="col-3">`
-    );
-  } else {
-     var trailer = $("<p>");
-  }
-
-  table.append(row3);
-  row3.append(episodes);
-  row3.append(genre);
-  table.append(trailer);
-
-  name.text(anime.title.userPreferred);
-  episodes.text(`Episodes: ${anime.episodes}`);
-  description.html(anime.description.replace(/<br\s*\/?>/g, "\n"));
-  season.text(`${anime.season} ${anime.seasonYear}`);
-
-  image.css("background-image", `url('  ${anime.coverImage.extraLarge} ')`);
-  image.css("background-size", "contain");
-  image.css("background-repeat", "no-repeat");
-
-  if (screen.availWidth > 400) {
-    image.height(300);
-    // image.width(200);
-  } else {
-    image.height(300);
-    image.width(200);
-  }
-
-  // image.prepend(`<img src=${anime.coverImage.extraLarge}>`)
-  // trailer.prepend(`<video src=https://www.youtube.com/watch?v=${anime.trailer.id}`)
-  trailer.text("TEST");
-  genre.text(anime.genres);
-  score.text(`Score ${anime.averageScore}`);
-
-  $("body").append(table);
-  // $('#table').append(row)
-
-  // row.append(image)
-  // row.append(name)
-  // row.append(episodes)
-  // row.append(description)
-  // row.append(season)
-  // row.append(trailer)
-  // row.append(genre)
-  // row.append(score)
-
-  console.log(screen.availWidth);
-}
+    pictureRow.appendChild(row2_2);
+    row2_2.appendChild(description);
+    row2_2.appendChild(genre);
+    row2_2.appendChild(season);
+  });
+};
+GetID();

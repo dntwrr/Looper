@@ -1,0 +1,59 @@
+/* 
+ .descript {
+height: 25%;
+color: yellow;
+ }
+
+.genre {
+    word-wrap: break-word;
+}
+
+p{
+    font-size: small;
+} */
+
+.genre-season {
+    font-size: .7em;
+    /* color: yellow; */
+    /* word-wrap: */
+    white-space: pre-wrap;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+/* .picture {
+    width: 100%;
+    height: 0;
+    padding-top: 80%;
+    border: 10px solid black;
+} */
+
+.dis {
+    border: 1px solid black;
+    height: 23.5vh;
+    font-size: .7em;
+    
+    
+}
+
+.picture {
+    border: 1px solid black;
+    /* height: 32.5vh; */
+    aspect-ratio: 4/5;
+
+}
+
+.score-episodes {
+    font-size: .8em;
+}
+
+#table {
+    margin-bottom: 20px;
+}
+
+.name {
+    padding-left: 24x;
+    
+}
+
+/* col 4 and height 23 &12*/
